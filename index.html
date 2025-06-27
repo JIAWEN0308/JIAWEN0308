@@ -1,35 +1,39 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>VR Architectural Walkthrough</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-
-    <!-- Common CSS -->
-    <link rel="stylesheet" type="text/css" href="./css/common.css">
-</head>
-<body>
-    <!-- Welcome Message -->
+﻿<body>
+    <!-- Welcome Text -->
     <div id="welcomeText">Welcome to the VR Architectural Walkthrough!</div>
 
-    <!-- External JS -->
     <script src="./libs/fas.js"></script>
-
-    <!-- Main App Entry -->
     <script type="module">
         import { App } from './app.js';
 
-        document.addEventListener("DOMContentLoaded", () => {
+        document.addEventListener("DOMContentLoaded", function () {
             const app = new App();
             window.app = app;
 
+            // Optional: Hide the welcome text after a few seconds
             const welcomeEl = document.getElementById('welcomeText');
             if (welcomeEl) {
                 setTimeout(() => {
                     welcomeEl.style.display = 'none';
-                }, 3000);
+                }, 3000); // Hide after 3 seconds
             }
         });
     </script>
+
+    <style>
+        #welcomeText {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            color: white;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px 30px;
+            border-radius: 12px;
+            z-index: 999;
+            text-align: center;
+        }
+    </style>
 </body>
-</html>
