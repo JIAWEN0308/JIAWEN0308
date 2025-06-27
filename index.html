@@ -1,78 +1,45 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>WebXR with Name UI</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./css/common.css" />
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-        }
+    <meta charset="UTF-8">
+    <title>VR Architectural Walkthrough with WebXR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
-        #ui-panel {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.85);
-            padding: 10px;
-            border-radius: 10px;
-            z-index: 10;
-        }
-
-        #userName {
-            padding: 5px;
-        }
-
-        #displayNameBtn {
-            padding: 5px 10px;
-            margin-left: 5px;
-        }
-
-        #nameDisplay {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 20px;
-            font-weight: bold;
-            color: white;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 8px 16px;
-            border-radius: 8px;
-            z-index: 10;
-            display: none;
-        }
-    </style>
+    <!-- Favicon and CSS -->
+    <link rel="stylesheet" href="./css/common.css">
 </head>
 <body>
-    <div id="ui-panel">
-        <input id="userName" type="text" placeholder="Enter your name" />
-        <button id="displayNameBtn">Display Name</button>
+    <!-- WebXR Canvas Placeholder -->
+    <main id="app" class="xr-canvas"></main>
+
+    <!-- Floating Tip Box -->
+    <div class="text-box">← Use your controller to move forward</div>
+
+    <!-- Bottom Description Panel -->
+    <div id="description">
+        <h2>Welcome to the Virtual Walkthrough</h2>
+        <p>Use a VR headset or your mouse to explore the space.</p>
     </div>
 
-    <div id="nameDisplay"></div>
+    <!-- ✅ Typing Box UI -->
+    <div class="typing-box">
+        <label for="userInput">Type something:</label>
+        <textarea id="userInput" placeholder="Enter your message..."></textarea>
+    </div>
 
+    <!-- JavaScript -->
     <script type="module">
         import { App } from './app.js';
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener("DOMContentLoaded", () => {
+            // Initialize 3D App
             const app = new App();
             window.app = app;
 
-            const input = document.getElementById('userName');
-            const button = document.getElementById('displayNameBtn');
-            const display = document.getElementById('nameDisplay');
-
-            button.addEventListener('click', () => {
-                const name = input.value.trim();
-                if (name) {
-                    display.textContent = `Welcome, ${name}!`;
-                    display.style.display = 'block';
-                } else {
-                    display.style.display = 'none';
-                }
+            // Handle user typing input
+            const inputBox = document.getElementById("userInput");
+            inputBox.addEventListener("input", () => {
+                console.log("User typed:", inputBox.value);
             });
         });
     </script>
