@@ -1,5 +1,6 @@
-html, 
-body, 
+﻿/* ========== Fullscreen Layout ========== */
+html,
+body,
 .xr-canvas {
     width: 100%;
     height: 100%;
@@ -8,6 +9,8 @@ body,
     -webkit-user-select: none;
     user-select: none;
 }
+
+/* ========== XR Canvas Styling ========== */
 .xr-canvas {
     position: absolute;
     top: 0;
@@ -16,51 +19,100 @@ body,
     right: 0;
     z-index: -2;
 }
+
 body {
     z-index: 1;
+    font-family: sans-serif;
 }
 
-
+/* ========== Description Bar ========== */
 #description {
     pointer-events: auto;
-    font-family: sans-serif;
     padding: 1em;
-    background-color:rgba(255,255,255,0.7);
+    background-color: rgba(255,255,255,0.7);
     -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
-    position:absolute;
+    position: absolute;
     bottom: 0px;
-    left:0px;
+    left: 0px;
     right: 0px;
 }
-#description > * {
-    pointer-events: none;
-}
 
+    #description > * {
+        pointer-events: none;
+    }
 
+/* ========== Button Styling ========== */
 button {
     font-size: 16px;
 }
 
-#go-button { margin: 20px; }
+#go-button {
+    margin: 20px;
+}
 
+/* ========== Floating Message ========== */
 .text-box {
     position: absolute;
     top: 5%;
     left: 50%;
+    transform: translateX(-50%);
     color: white;
-    background: rgba(27,55,55,0.75);;
-    outline: 1px solid rgba(127,255,255,0.75);
-    border: 0px;
+    background: rgba(27, 55, 55, 0.75);
+    outline: 1px solid rgba(127, 255, 255, 0.75);
     padding: 5px 10px;
-    margin: 0px 0 0 -50px;
     font-size: 0.8em;
+    border-radius: 6px;
 }
 
+/* ========== Center Message (optional) ========== */
 .common-message {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 20px;
+}
+
+/* ========== ✅ Typing Input Box ========== */
+.typing-box {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(255, 255, 255, 0.85);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    z-index: 10;
+    width: 250px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+    .typing-box label {
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .typing-box textarea {
+        width: 100%;
+        height: 80px;
+        font-size: 14px;
+        border: none;
+        outline: none;
+        resize: none;
+        padding: 5px;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+/* Responsive Design */
+@media screen and (max-width: 600px) {
+    .typing-box {
+        width: 90%;
+        left: 5%;
+        right: 5%;
+        bottom: 10px;
+    }
 }
