@@ -165,4 +165,65 @@ class App {
 
     buildControllers(parent = this.scene) {
         const controllerModelFactory = new XRControllerModelFactory();
-        const geometry = new THREE.BufferGeomet
+        const geometry = new THREE.BufferGeometry().setFromPoints([
+            new THREE.Vector3(0, 0, 0),
+            new THREE.Vector3(0, 0, -1)
+        ]);
+        const line = new THREE.Line(geometry);
+        line.scale.z = 0;
+
+        const controllers = [];
+        for (let i = 0; i <= 1; i++) {
+            const controller = this.renderer.xr.getController(i);
+            controller.add(line.clone());
+            controller.userData.selectPressed = false;
+            parent.add(controller);
+            controllers.push(controller);
+
+            const grip = this.renderer.xr.getControllerGrip(i);
+            grip.add(controllerModelFactory.createControllerModel(grip));
+            parent.add(grip);
+        }
+        return controllers;
+    }
+
+    displayUserName3D() {
+        const input = document.getElementById('userName');
+        if (!input) return;
+
+        const name = input.value.trim();
+        if (!name) return;
+
+        if (this.nameMesh) {
+            this.scene.remove(this.nameMesh);
+            this.nameMesh.geometry.dispose();
+            this.nameMesh.material.dispose();
+        }
+
+        this.fontLoader.load('./assets/fonts/helvetiker_regular.typeface.json', (font) => {
+            const geometry = new TextGeometry(name, {
+                font: font,
+                size: 0.2,
+                height: 0.02
+            });
+            const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+            this.nameMesh = new THREE.Mesh(geometry, material);
+
+            this.nameMesh.position.set(0, 2, -1);
+            this.camera.add(this.nameMesh);
+        });
+    }
+
+    render() {
+        const dt = this.clock.getDelta();
+        if (this.renderer.xr.isPresenting) {
+            if (this.useGaze && this.gazeController !== undefined) {
+                this.gazeController.update();
+            }
+        }
+        this.stats.update();
+        this.renderer.render(this.scene, this.camera);
+    }
+}
+
+export { App };
