@@ -1,4 +1,5 @@
-// App.js with static 3D name text on button click (no floating)
+// app.js (Simplified Version: No 3D Text, just core XR scene)
+
 import * as THREE from './libs/three/three.module.js';
 import { GLTFLoader } from './libs/three/jsm/GLTFLoader.js';
 import { DRACOLoader } from './libs/three/jsm/DRACOLoader.js';
@@ -8,8 +9,6 @@ import { LoadingBar } from './libs/LoadingBar.js';
 import { VRButton } from './libs/VRButton.js';
 import { GazeController } from './libs/GazeController.js';
 import { XRControllerModelFactory } from './libs/three/jsm/XRControllerModelFactory.js';
-import { FontLoader } from './libs/three/jsm/FontLoader.js';
-import { TextGeometry } from './libs/three/jsm/TextGeometry.js';
 
 class App {
     constructor() {
@@ -29,7 +28,7 @@ class App {
         this.scene = new THREE.Scene();
         this.scene.add(this.dolly);
 
-        const ambient = new THREE.HemisphereLight(0xFFFFFF, 0xAAAAAA, 0.8);
+        const ambient = new THREE.HemisphereLight(0xffffff, 0xaaaaaa, 0.8);
         this.scene.add(ambient);
 
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -37,6 +36,7 @@ class App {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.outputEncoding = THREE.sRGBEncoding;
         container.appendChild(this.renderer.domElement);
+
         this.setEnvironment();
 
         window.addEventListener('resize', this.resize.bind(this));
@@ -52,18 +52,10 @@ class App {
         container.appendChild(this.stats.dom);
 
         this.loadingBar = new LoadingBar();
-        this.loadCollege();
 
         this.immersive = false;
 
-        // Setup for 3D text
-        this.fontLoader = new FontLoader();
-        this.nameMesh = null;
-
-        const displayBtn = document.getElementById('displayNameBtn');
-        if (displayBtn) {
-            displayBtn.addEventListener('click', () => this.displayUserName3D());
-        }
+        this.loadCollege();
     }
 
     setEnvironment() {
@@ -113,6 +105,14 @@ class App {
                     }
                 }
             });
+
+            const door1 = college.getObjectByName("LobbyShop_Door__1_");
+            const door2 = college.getObjectByName("LobbyShop_Door__2_");
+            const pos = door1.position.clone().sub(door2.position).multiplyScalar(0.5).add(door2.position);
+            const obj = new THREE.Object3D();
+            obj.name = "LobbyShop";
+            obj.position.copy(pos);
+            college.add(obj);
 
             self.loadingBar.visible = false;
             self.setupXR();
@@ -173,34 +173,6 @@ class App {
             parent.add(grip);
         }
         return controllers;
-    }
-
-    displayUserName3D() {
-        const input = document.getElementById('userName');
-        if (!input) return;
-
-        const name = input.value.trim();
-        if (!name) return;
-
-        if (this.nameMesh) {
-            this.camera.remove(this.nameMesh);
-            this.nameMesh.geometry.dispose();
-            this.nameMesh.material.dispose();
-            this.nameMesh = null;
-        }
-
-        this.fontLoader.load('./assets/fonts/helvetiker_regular.typeface.json', (font) => {
-            const geometry = new TextGeometry(name, {
-                font: font,
-                size: 0.2,
-                height: 0.02
-            });
-            const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
-            this.nameMesh = new THREE.Mesh(geometry, material);
-
-            this.nameMesh.position.set(0, 1.5, -1); // fixed position in front of camera
-            this.camera.add(this.nameMesh);
-        });
     }
 
     render() {

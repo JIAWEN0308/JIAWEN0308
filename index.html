@@ -2,66 +2,78 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>VR Architectural Walkthrough</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>WebXR with Name UI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./css/common.css" />
-
-    <!-- Favicon & Theme Color -->
-    <link rel="apple-touch-icon" sizes="180x180" href="./css/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="./css/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="./css/favicon/favicon-16x16.png">
-    <link rel="manifest" href="./css/favicon/site.webmanifest">
-    <meta name="theme-color" content="#ffffff">
-
     <style>
         body {
             margin: 0;
-            padding: 0;
             overflow: hidden;
-            font-family: sans-serif;
         }
 
         #ui-panel {
             position: absolute;
             bottom: 20px;
             left: 20px;
-            background-color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.85);
             padding: 10px;
             border-radius: 10px;
             z-index: 10;
-            backdrop-filter: blur(5px);
         }
 
         #userName {
             padding: 5px;
-            font-size: 14px;
-            margin-right: 5px;
         }
 
         #displayNameBtn {
-            padding: 6px 10px;
-            font-size: 14px;
-            cursor: pointer;
+            padding: 5px 10px;
+            margin-left: 5px;
+        }
+
+        #nameDisplay {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px 16px;
+            border-radius: 8px;
+            z-index: 10;
+            display: none;
         }
     </style>
 </head>
 <body>
-    <!-- UI Panel -->
     <div id="ui-panel">
         <input id="userName" type="text" placeholder="Enter your name" />
         <button id="displayNameBtn">Display Name</button>
     </div>
 
-    <!-- Library preload (Optional for icons etc.) -->
-    <script src="./libs/fas.js"></script>
+    <div id="nameDisplay"></div>
 
-    <!-- App Loader -->
     <script type="module">
         import { App } from './app.js';
 
-        document.addEventListener("DOMContentLoaded", () => {
+        document.addEventListener('DOMContentLoaded', () => {
             const app = new App();
             window.app = app;
+
+            const input = document.getElementById('userName');
+            const button = document.getElementById('displayNameBtn');
+            const display = document.getElementById('nameDisplay');
+
+            button.addEventListener('click', () => {
+                const name = input.value.trim();
+                if (name) {
+                    display.textContent = `Welcome, ${name}!`;
+                    display.style.display = 'block';
+                } else {
+                    display.style.display = 'none';
+                }
+            });
         });
     </script>
 </body>
